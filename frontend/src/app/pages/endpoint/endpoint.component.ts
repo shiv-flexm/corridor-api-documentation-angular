@@ -1,6 +1,7 @@
 import { Component, inject, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiDocsService } from '../../services/api-docs.service';
 import { AuthService } from '../../services/auth.service';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
@@ -25,7 +26,7 @@ import { TryItComponent } from '../../components/try-it/try-it.component';
           <!-- Title -->
           <div class="flex items-start justify-between gap-6 mb-4">
             <div class="min-w-0">
-              <h1 class="font-display italic text-5xl lg:text-6xl tracking-tight leading-[1.02]" style="color: var(--text)">
+              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.08]" style="color: var(--text)">
                 {{ r.endpoint.name }}
               </h1>
               <p class="mt-4 max-w-3xl text-base" style="color: var(--muted)" data-testid="endpoint-description">
@@ -138,7 +139,7 @@ import { TryItComponent } from '../../components/try-it/try-it.component';
                           [style.background]="statusTint(s.code).bg"
                           [style.color]="statusTint(s.code).fg">{{ s.code }}</span>
                     <div class="min-w-0">
-                      <div class="text-sm font-medium" style="color: var(--text)">{{ s.label }}</div>
+                      <div class="text-sm font-semibold" style="color: var(--text)">{{ s.label }}</div>
                       <div class="text-sm" style="color: var(--muted)">{{ s.description }}</div>
                     </div>
                   </li>
@@ -153,7 +154,7 @@ import { TryItComponent } from '../../components/try-it/try-it.component';
             </div>
 
             <!-- Sticky code column -->
-            <aside class="lg:sticky lg:top-24 h-max space-y-6">
+            <aside class="lg:sticky lg:top-6 h-max space-y-6">
               <div>
                 <div class="text-[10px] uppercase tracking-[0.18em] mb-2" style="color: var(--muted)">Request</div>
                 <app-code-block variant="request" [endpoint]="r.endpoint"></app-code-block>
@@ -172,7 +173,7 @@ import { TryItComponent } from '../../components/try-it/try-it.component';
       <div class="max-w-xl mx-auto px-6 py-24 text-center fade-up" data-testid="auth-gate">
         <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl mb-4"
              style="background: var(--panel); border:1px solid var(--border)">🔒</div>
-        <h2 class="font-display italic text-4xl mb-3">This endpoint is private.</h2>
+        <h2 class="text-3xl font-bold mb-3" style="color: var(--text)">This endpoint is private.</h2>
         <p class="text-sm mb-6" style="color: var(--muted)">
           Sign in from the sidebar to unlock auth-gated endpoints like this one.
         </p>
@@ -181,7 +182,7 @@ import { TryItComponent } from '../../components/try-it/try-it.component';
 
     <ng-template #notFound>
       <div class="max-w-xl mx-auto px-6 py-24 text-center">
-        <h2 class="font-display italic text-4xl mb-3">Endpoint not found.</h2>
+        <h2 class="text-3xl font-bold mb-3" style="color: var(--text)">Endpoint not found.</h2>
         <p class="text-sm" style="color: var(--muted)">Try searching in the sidebar.</p>
       </div>
     </ng-template>
@@ -193,13 +194,13 @@ export class EndpointComponent {
   docs = inject(ApiDocsService);
   auth = inject(AuthService);
 
-  moduleId = computed(() => this.route.snapshot.paramMap.get('module') ?? '');
-  endpointId = computed(() => this.route.snapshot.paramMap.get('endpoint') ?? '');
+  // Reactive params → updates whenever route params change
+  private params = toSignal(this.route.paramMap, { initialValue: this.route.snapshot.paramMap });
 
-  resolved = computed(() => {
-    this.route.params.subscribe(); // ensure subscription
-    return this.docs.findEndpoint(this.moduleId(), this.endpointId());
-  });
+  moduleId = computed(() => this.params().get('module') ?? '');
+  endpointId = computed(() => this.params().get('endpoint') ?? '');
+
+  resolved = computed(() => this.docs.findEndpoint(this.moduleId(), this.endpointId()));
 
   gated = computed(() => {
     const r = this.resolved();
@@ -208,21 +209,25 @@ export class EndpointComponent {
   });
 
   constructor() {
-    // re-resolve on navigation
-    this.route.params.subscribe(() => {
-      // signals read inside template re-evaluate via route snapshot
-    });
+    // When version changes and current endpoint no longer exists in that version, redirect
     effect(() => {
-      const r = this.docs.findEndpoint(
-        this.route.snapshot.paramMap.get('module') ?? '',
-        this.route.snapshot.paramMap.get('endpoint') ?? ''
-      );
+      const r = this.resolved();
       if (!r) return;
       const v = this.docs.version();
       if (!r.endpoint.versions.includes(v)) {
-        // Version switch hides the endpoint → redirect to first match
         this.router.navigateByUrl(this.docs.firstEndpointPath());
       }
+    });
+
+    // Scroll main to top on every navigation
+    effect(() => {
+      // touch signals so effect re-runs on nav
+      this.moduleId();
+      this.endpointId();
+      queueMicrotask(() => {
+        const main = document.getElementById('main-scroll');
+        if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     });
   }
 

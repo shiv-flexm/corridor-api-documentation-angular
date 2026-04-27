@@ -1,6 +1,6 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ApiDocsService } from '../../services/api-docs.service';
 import { AuthService } from '../../services/auth.service';
 import { MethodBadgeComponent } from '../method-badge/method-badge.component';
@@ -11,31 +11,32 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
   imports: [CommonModule, RouterLink, RouterLinkActive, MethodBadgeComponent],
   template: `
     <aside
-      class="w-[300px] shrink-0 h-screen sticky top-0 z-20 flex flex-col border-r"
+      class="w-[300px] shrink-0 h-screen flex flex-col border-r"
       style="background: var(--panel); border-color: var(--border)"
       data-testid="sidebar"
     >
       <!-- Brand -->
-      <div class="px-5 pt-6 pb-4 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl flex items-center justify-center font-mono font-bold text-black"
-             style="background: linear-gradient(135deg, #3DE6D2, #7CF8EB)">
+      <div class="px-5 pt-6 pb-4 flex items-center gap-3 shrink-0">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center font-mono font-bold"
+             [style.background]="'linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 60%, white))'"
+             [style.color]="'var(--accent-contrast)'">
           R
         </div>
         <div class="leading-tight">
-          <div class="font-display text-xl italic tracking-tight" style="color: var(--text)">Relay</div>
+          <div class="text-lg font-bold tracking-tight" style="color: var(--text)">Relay</div>
           <div class="text-[11px] uppercase tracking-[0.18em]" style="color: var(--muted)">API · {{ docs.version() }}</div>
         </div>
       </div>
 
       <!-- Search -->
-      <div class="px-5 pb-3">
+      <div class="px-5 pb-3 shrink-0">
         <div class="relative">
           <input
             type="text"
             placeholder="Search endpoints…"
             [value]="docs.search()"
             (input)="onSearch($event)"
-            class="w-full text-sm rounded-xl py-2.5 pl-9 pr-3 focus:outline-none transition-colors"
+            class="w-full text-sm rounded-xl py-2.5 pl-9 pr-3 focus:outline-none"
             style="background: var(--panel-2); color: var(--text); border: 1px solid var(--border)"
             data-testid="sidebar-search"
           />
@@ -46,27 +47,48 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
       </div>
 
       <!-- Version selector -->
-      <div class="px-5 pb-3 flex items-center gap-1.5" data-testid="version-switch">
+      <div class="px-5 pb-3 flex items-center gap-1.5 shrink-0" data-testid="version-switch">
         <span class="text-[10px] uppercase tracking-wider mr-1" style="color: var(--muted)">Version</span>
         <button
           *ngFor="let v of ['v1','v2']"
           (click)="setVersion(v)"
           class="text-xs font-mono px-2.5 py-1 pill transition-all"
           [style.background]="docs.version() === v ? 'var(--accent)' : 'transparent'"
-          [style.color]="docs.version() === v ? '#04120E' : 'var(--muted)'"
+          [style.color]="docs.version() === v ? 'var(--accent-contrast)' : 'var(--muted)'"
           [style.border]="'1px solid var(--border)'"
           [attr.data-testid]="'version-' + v"
         >{{ v }}</button>
       </div>
 
-      <!-- Nav -->
+      <!-- Nav (scrollable area) -->
       <nav class="flex-1 overflow-y-auto px-3 pb-4" data-testid="sidebar-nav">
-        <ng-container *ngFor="let mod of docs.filteredModules(); let i = index">
+        <!-- Introduction -->
+        <a
+          [routerLink]="['/introduction']"
+          routerLinkActive
+          #introActive="routerLinkActive"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm transition-colors mt-1"
+          [style.color]="introActive.isActive ? 'var(--text)' : 'var(--muted)'"
+          [style.background]="introActive.isActive ? 'color-mix(in oklab, var(--accent) 12%, transparent)' : 'transparent'"
+          [style.boxShadow]="introActive.isActive ? 'inset 3px 0 0 var(--accent)' : 'none'"
+          data-testid="nav-introduction"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
+          </svg>
+          <span class="font-medium">Introduction</span>
+        </a>
+
+        <div class="my-3 mx-3 h-px" style="background: var(--border)"></div>
+
+        <ng-container *ngFor="let mod of docs.filteredModules()">
           <div class="mt-2">
             <button
               (click)="toggle(mod.id)"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs uppercase tracking-[0.12em] transition-colors hover:bg-white/5"
-              style="color: var(--muted)"
+              class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs uppercase tracking-[0.12em] transition-colors"
+              [style.color]="'var(--muted)'"
               [attr.data-testid]="'module-' + mod.id"
             >
               <span class="font-semibold">{{ mod.name }}</span>
@@ -78,11 +100,12 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
               <li *ngFor="let ep of visibleEndpoints(mod)">
                 <a
                   [routerLink]="['/docs', mod.id, ep.id]"
-                  routerLinkActive="active-link"
+                  routerLinkActive
                   #rla="routerLinkActive"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-white/5"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors"
                   [style.color]="rla.isActive ? 'var(--text)' : 'var(--muted)'"
-                  [style.background]="rla.isActive ? 'rgba(61,230,210,0.08)' : 'transparent'"
+                  [style.background]="rla.isActive ? 'color-mix(in oklab, var(--accent) 12%, transparent)' : 'transparent'"
+                  [style.boxShadow]="rla.isActive ? 'inset 3px 0 0 var(--accent)' : 'none'"
                   [attr.data-testid]="'nav-' + mod.id + '-' + ep.id"
                 >
                   <app-method-badge [method]="ep.method"></app-method-badge>
@@ -94,15 +117,15 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
           </div>
         </ng-container>
         <div *ngIf="docs.filteredModules().length === 0" class="px-3 py-6 text-sm" style="color: var(--muted)" data-testid="no-results">
-          No endpoints match “{{ docs.search() }}”.
+          No endpoints match "{{ docs.search() }}".
         </div>
       </nav>
 
       <!-- Auth gate -->
-      <div class="px-5 py-4 border-t" style="border-color: var(--border)">
+      <div class="px-5 py-4 border-t shrink-0" style="border-color: var(--border)">
         <button
           (click)="auth.toggle()"
-          class="w-full text-xs font-mono px-3 py-2 pill flex items-center justify-between transition-colors hover:bg-white/5"
+          class="w-full text-xs font-mono px-3 py-2 pill flex items-center justify-between transition-colors"
           style="background: var(--panel-2); color: var(--text); border: 1px solid var(--border)"
           data-testid="auth-toggle"
         >
@@ -113,19 +136,13 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
       </div>
     </aside>
   `,
-  styles: [`:host{display:flex}.active-link{position:relative}`]
+  styles: [`:host{display:flex}`]
 })
 export class SidebarComponent {
   docs = inject(ApiDocsService);
   auth = inject(AuthService);
-  router = inject(Router);
 
   openMap: Record<string, boolean> = {};
-
-  constructor() {
-    // open all by default
-    this.docs.filteredModules().forEach((m) => (this.openMap[m.id] = true));
-  }
 
   isOpen(id: string): boolean {
     if (this.openMap[id] === undefined) this.openMap[id] = true;

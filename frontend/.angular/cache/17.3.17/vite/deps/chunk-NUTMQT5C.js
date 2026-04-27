@@ -24101,6 +24101,7 @@ export {
   ConnectableObservable,
   Subject,
   BehaviorSubject,
+  ReplaySubject,
   EMPTY,
   from,
   of,
@@ -24624,4 +24625,4 @@ export {
    * found in the LICENSE file at https://angular.io/license
    *)
 */
-//# sourceMappingURL=chunk-GSEU53OH.js.map
+//# sourceMappingURL=chunk-NUTMQT5C.js.map

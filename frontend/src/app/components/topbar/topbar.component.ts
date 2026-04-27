@@ -9,14 +9,14 @@ import { ApiDocsService } from '../../services/api-docs.service';
   imports: [CommonModule],
   template: `
     <header
-      class="sticky top-0 z-30 backdrop-blur-xl border-b px-6 md:px-10 py-3.5 flex items-center justify-between"
-      style="background: color-mix(in oklab, var(--panel) 70%, transparent); border-color: var(--border)"
+      class="shrink-0 z-30 border-b px-6 md:px-10 py-3.5 flex items-center justify-between"
+      style="background: var(--panel); border-color: var(--border)"
       data-testid="topbar"
     >
       <div class="flex items-center gap-3 text-sm">
         <span class="font-mono text-xs uppercase tracking-widest" style="color: var(--muted)">Reference</span>
         <span style="color: var(--muted)">/</span>
-        <span class="font-medium">{{ docs.version() }} Stable</span>
+        <span class="font-semibold" style="color: var(--text)">{{ docs.version() }} Stable</span>
       </div>
 
       <div class="flex items-center gap-2">
@@ -24,7 +24,7 @@ import { ApiDocsService } from '../../services/api-docs.service';
           href="https://github.com"
           target="_blank"
           rel="noreferrer"
-          class="hidden md:inline-flex items-center gap-2 text-xs font-mono px-3 py-2 pill hover:bg-white/5 transition-colors"
+          class="hidden md:inline-flex items-center gap-2 text-xs font-mono px-3 py-2 pill transition-colors"
           style="color: var(--muted); border: 1px solid var(--border)"
           data-testid="github-link"
         >
@@ -33,9 +33,9 @@ import { ApiDocsService } from '../../services/api-docs.service';
         </a>
         <button
           (click)="theme.toggle()"
-          class="pill border w-9 h-9 inline-flex items-center justify-center hover:bg-white/5 transition-colors"
+          class="pill border w-9 h-9 inline-flex items-center justify-center transition-colors"
           style="color: var(--text); border-color: var(--border); background: var(--panel-2)"
-          [attr.aria-label]="'toggle theme'"
+          aria-label="toggle theme"
           data-testid="theme-toggle"
         >
           <svg *ngIf="theme.theme() === 'dark'" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">

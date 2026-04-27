@@ -13,19 +13,19 @@ type Lang = 'curl' | 'json' | 'ts' | 'py' | 'node';
   template: `
     <div class="terminal fade-up" [attr.data-testid]="'code-block-' + variant">
       <!-- Header: window dots + tabs -->
-      <div class="flex items-center gap-3 px-4 py-2.5 border-b border-white/5">
+      <div class="flex items-center gap-3 px-4 py-2.5 border-b" style="border-color: rgba(255,255,255,0.06)">
         <div class="flex items-center gap-1.5">
           <span class="w-2.5 h-2.5 rounded-full" style="background:#FF5F56"></span>
           <span class="w-2.5 h-2.5 rounded-full" style="background:#FFBD2E"></span>
           <span class="w-2.5 h-2.5 rounded-full" style="background:#27C93F"></span>
         </div>
-        <div class="flex items-center gap-1 ml-2">
+        <div class="flex items-center gap-1 ml-2 flex-wrap">
           <button
             *ngFor="let t of availableTabs"
             (click)="setLang(t.id)"
-            class="text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md transition-colors"
+            class="text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md"
             [style.color]="lang() === t.id ? '#E9EEF6' : '#8A94A6'"
-            [style.background]="lang() === t.id ? 'rgba(61,230,210,0.12)' : 'transparent'"
+            [style.background]="lang() === t.id ? 'rgba(61,230,210,0.14)' : 'transparent'"
             [attr.data-testid]="'tab-' + t.id"
           >
             {{ t.label }}
@@ -35,9 +35,9 @@ type Lang = 'curl' | 'json' | 'ts' | 'py' | 'node';
           <span *ngIf="label" class="text-[11px] font-mono" style="color:#8A94A6">{{ label }}</span>
           <button
             (click)="copy()"
-            class="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md transition-colors"
+            class="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md"
             [style.color]="copied() ? '#3DE6D2' : '#8A94A6'"
-            [style.background]="'rgba(255,255,255,0.04)'"
+            style="background: rgba(255,255,255,0.04)"
             [attr.data-testid]="'copy-btn-' + variant"
           >
             <svg *ngIf="!copied()" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -59,8 +59,6 @@ type Lang = 'curl' | 'json' | 'ts' | 'py' | 'node';
   `
 })
 export class CodeBlockComponent implements OnChanges {
-  /** When used for `request`: shows cURL / TS / Python / Node tabs */
-  /** When used for `response` or `payload`: only JSON tab */
   @Input() variant: 'request' | 'payload' | 'response' = 'request';
   @Input() endpoint: Endpoint | null = null;
   @Input() payload: unknown = null;

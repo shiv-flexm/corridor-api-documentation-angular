@@ -9,19 +9,27 @@ import { ThemeService } from './services/theme.service';
   standalone: true,
   imports: [RouterOutlet, SidebarComponent, TopbarComponent],
   template: `
-    <div class="grain min-h-screen flex" [attr.data-theme]="theme.theme()">
-      <app-sidebar class="hidden md:flex" data-testid="app-sidebar"></app-sidebar>
-      <div class="flex-1 min-w-0 flex flex-col relative z-10">
+    <div class="grain h-screen flex overflow-hidden" [attr.data-theme]="theme.theme()">
+      <!-- Fixed sidebar -->
+      <app-sidebar class="hidden md:flex shrink-0" data-testid="app-sidebar"></app-sidebar>
+
+      <!-- Right column: sticky header + scrollable main -->
+      <div class="flex-1 min-w-0 flex flex-col relative z-10 overflow-hidden">
         <app-topbar data-testid="app-topbar"></app-topbar>
-        <main class="flex-1 min-w-0" data-testid="app-main">
+
+        <main
+          id="main-scroll"
+          class="flex-1 min-w-0 overflow-y-auto overflow-x-hidden scroll-smooth"
+          data-testid="app-main"
+        >
           <router-outlet></router-outlet>
+          <footer class="px-8 py-6 text-xs" style="color: var(--muted)">
+            <div class="max-w-5xl mx-auto flex items-center justify-between">
+              <span>Built with Angular · Relay API Docs</span>
+              <span class="font-mono">api.relay.dev</span>
+            </div>
+          </footer>
         </main>
-        <footer class="px-8 py-6 text-xs" style="color: var(--muted)">
-          <div class="max-w-5xl mx-auto flex items-center justify-between">
-            <span>Built with Angular · Relay API Docs</span>
-            <span class="font-mono">api.relay.dev</span>
-          </div>
-        </footer>
       </div>
     </div>
   `
