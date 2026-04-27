@@ -18,6 +18,19 @@ import { CommandPaletteService } from '../../services/command-palette.service';
         <span class="font-mono text-xs uppercase tracking-widest" style="color: var(--muted)">Reference</span>
         <span style="color: var(--muted)">/</span>
         <span class="font-semibold" style="color: var(--text)">{{ docs.version() }} Stable</span>
+
+        <!-- Version switcher (moved from sidebar) -->
+        <div class="ml-2 flex items-center gap-1" data-testid="version-switch">
+          <button
+            *ngFor="let v of ['v1','v2']"
+            (click)="setVersion(v)"
+            class="text-[11px] font-mono px-2 py-0.5 pill transition-all"
+            [style.background]="docs.version() === v ? 'var(--accent)' : 'transparent'"
+            [style.color]="docs.version() === v ? 'var(--accent-contrast)' : 'var(--muted)'"
+            [style.border]="'1px solid var(--border)'"
+            [attr.data-testid]="'version-' + v"
+          >{{ v }}</button>
+        </div>
       </div>
 
       <div class="flex items-center gap-2">
@@ -74,4 +87,8 @@ export class TopbarComponent {
   docs = inject(ApiDocsService);
   palette = inject(CommandPaletteService);
   readonly modKeyLabel = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl';
+
+  setVersion(v: string) {
+    this.docs.setVersion(v as 'v1' | 'v2');
+  }
 }

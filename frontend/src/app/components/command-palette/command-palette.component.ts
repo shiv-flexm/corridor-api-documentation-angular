@@ -43,8 +43,8 @@ interface Hit {
         data-testid="cmdk-dialog"
       >
         <!-- Input -->
-        <div class="flex items-center gap-3 px-4 py-3 border-b" style="border-color: var(--border)">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--muted)">
+        <div class="flex items-center gap-3 px-5 py-4 border-b" style="border-color: var(--border)">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--muted)">
             <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
           </svg>
           <input
@@ -54,7 +54,7 @@ interface Hit {
             (input)="onInput($event)"
             (keydown)="onKey($event)"
             placeholder="Search endpoints, methods, routes…"
-            class="flex-1 bg-transparent text-[15px] outline-none"
+            class="flex-1 bg-transparent text-[16px] leading-7 outline-none py-1"
             style="color: var(--text)"
             data-testid="cmdk-input"
             autocomplete="off"

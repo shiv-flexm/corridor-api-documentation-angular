@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ApiDocsService } from '../../services/api-docs.service';
 import { AuthService } from '../../services/auth.service';
+import { CommandPaletteService } from '../../services/command-palette.service';
 import { MethodBadgeComponent } from '../method-badge/method-badge.component';
 
 @Component({
@@ -28,36 +29,37 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
         </div>
       </div>
 
-      <!-- Search -->
-      <div class="px-5 pb-3 shrink-0">
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Search endpoints…"
-            [value]="docs.search()"
-            (input)="onSearch($event)"
-            class="w-full text-sm rounded-xl py-2.5 pl-9 pr-3 focus:outline-none"
-            style="background: var(--panel-2); color: var(--text); border: 1px solid var(--border)"
-            data-testid="sidebar-search"
-          />
+      <!-- Search trigger (opens command palette) -->
+      <div class="px-5 pb-1.5 shrink-0">
+        <button
+          type="button"
+          (click)="openPalette()"
+          (focus)="openPalette()"
+          class="w-full flex items-center gap-2.5 text-sm rounded-xl py-2.5 pl-9 pr-3 relative text-left"
+          style="background: var(--panel-2); color: var(--muted); border: 1px solid var(--border)"
+          data-testid="sidebar-search"
+          aria-label="Open search"
+        >
           <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--muted)">
             <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
           </svg>
-        </div>
+          <span class="flex-1 truncate">Search endpoints…</span>
+          <span class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 rounded text-[10px] font-mono"
+                 style="background: var(--panel); border: 1px solid var(--border); color: var(--muted)">{{ modKeyLabel }}</kbd>
+            <kbd class="px-1.5 py-0.5 rounded text-[10px] font-mono"
+                 style="background: var(--panel); border: 1px solid var(--border); color: var(--muted)">K</kbd>
+          </span>
+        </button>
       </div>
 
-      <!-- Version selector -->
-      <div class="px-5 pb-3 flex items-center gap-1.5 shrink-0" data-testid="version-switch">
-        <span class="text-[10px] uppercase tracking-wider mr-1" style="color: var(--muted)">Version</span>
-        <button
-          *ngFor="let v of ['v1','v2']"
-          (click)="setVersion(v)"
-          class="text-xs font-mono px-2.5 py-1 pill transition-all"
-          [style.background]="docs.version() === v ? 'var(--accent)' : 'transparent'"
-          [style.color]="docs.version() === v ? 'var(--accent-contrast)' : 'var(--muted)'"
-          [style.border]="'1px solid var(--border)'"
-          [attr.data-testid]="'version-' + v"
-        >{{ v }}</button>
+      <!-- Subtle hint text (replaces the old "Version v1 v2" row) -->
+      <div class="px-5 pb-3 shrink-0">
+        <span class="text-[11px] font-mono tracking-wide"
+              style="color: #6B7280"
+              data-testid="sidebar-hint">
+          Search (Ctrl&nbsp;+&nbsp;K)
+        </span>
       </div>
 
       <!-- Nav (scrollable area) -->
@@ -117,7 +119,7 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
           </div>
         </ng-container>
         <div *ngIf="docs.filteredModules().length === 0" class="px-3 py-6 text-sm" style="color: var(--muted)" data-testid="no-results">
-          No endpoints match "{{ docs.search() }}".
+          No endpoints match.
         </div>
       </nav>
 
@@ -141,6 +143,9 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
 export class SidebarComponent {
   docs = inject(ApiDocsService);
   auth = inject(AuthService);
+  palette = inject(CommandPaletteService);
+
+  readonly modKeyLabel = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl';
 
   openMap: Record<string, boolean> = {};
 
@@ -157,12 +162,7 @@ export class SidebarComponent {
     return all.filter((e) => !e.requiresAuth || this.auth.signedIn());
   }
 
-  onSearch(ev: Event) {
-    const v = (ev.target as HTMLInputElement).value;
-    this.docs.setSearch(v);
-  }
-
-  setVersion(v: string) {
-    this.docs.setVersion(v as 'v1' | 'v2');
+  openPalette() {
+    this.palette.show();
   }
 }
