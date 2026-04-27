@@ -16,15 +16,11 @@ import { MethodBadgeComponent } from '../../components/method-badge/method-badge
       </div>
 
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]" style="color: var(--text)">
-        Build with <span style="color: var(--accent)">Relay</span>.<br/>
-        Ship money like Stripe.
+        Welcome to the <span style="color: var(--accent)">Flex Corridor API</span> Documentation.
       </h1>
       <p class="mt-6 max-w-2xl text-base" style="color: var(--muted)">
-        Relay is a developer-first platform for identity, payments, and realtime sync. This reference
-        documents every public endpoint across four modules — <span style="color: var(--text)">Users</span>,
-        <span style="color: var(--text)">Transactions</span>, <span style="color: var(--text)">Auth</span>,
-        and <span style="color: var(--text)">Webhooks</span> — with live code samples in five languages,
-        typed request and response schemas, and a safe sandbox for trying each call.
+        FlexRemit is designed to be more than just a remittance solution - it is a complete cross-border payments ecosystem that enables businesses to send money globally with speed, security, and confidence. Through this platform, financial institutions, fintech companies, and remittance operators can build, scale, and manage international money transfers efficiently.
+Our APIs are built to support modern money movement, providing a flexible and reliable infrastructure that adapts to your business needs.
       </p>
 
       <div class="mt-10 flex flex-wrap gap-3">
@@ -43,21 +39,26 @@ import { MethodBadgeComponent } from '../../components/method-badge/method-badge
       </div>
 
       <!-- Quick start blocks -->
-      <div class="mt-14 grid md:grid-cols-3 gap-4" data-testid="quickstart-grid">
+      <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6" data-testid="quickstart-grid">
         <div class="p-5 rounded-2xl border" style="background: var(--panel); border-color: var(--border)">
-          <div class="text-xs font-mono uppercase tracking-[0.18em] mb-2" style="color: var(--muted)">Step 1</div>
-          <div class="text-lg font-semibold mb-1">Get an API key</div>
-          <div class="text-sm" style="color: var(--muted)">Spin up a workspace and copy a test key from the dashboard.</div>
+          
+          <div class="text-lg font-semibold mb-1">Global by Design</div>
+          <div class="text-sm" style="color: var(--muted)">Our platform is engineered to support true cross-border scalability, from regional corridors to global remittance networks.</div>
         </div>
         <div class="p-5 rounded-2xl border" style="background: var(--panel); border-color: var(--border)">
-          <div class="text-xs font-mono uppercase tracking-[0.18em] mb-2" style="color: var(--muted)">Step 2</div>
-          <div class="text-lg font-semibold mb-1">Call any endpoint</div>
-          <div class="text-sm" style="color: var(--muted)">Every request is authed via <span class="font-mono">Authorization: Bearer</span>.</div>
+          
+          <div class="text-lg font-semibold mb-1">Compliance Without Complexity</div>
+          <div class="text-sm" style="color: var(--muted)">Stay aligned with regulatory requirements using built-in eKYC and automated reporting, without adding operational burden.</div>
         </div>
         <div class="p-5 rounded-2xl border" style="background: var(--panel); border-color: var(--border)">
-          <div class="text-xs font-mono uppercase tracking-[0.18em] mb-2" style="color: var(--muted)">Step 3</div>
-          <div class="text-lg font-semibold mb-1">Subscribe to webhooks</div>
-          <div class="text-sm" style="color: var(--muted)">Receive signed events in realtime for every state change.</div>
+          
+          <div class="text-lg font-semibold mb-1">Built for Agility</div>
+          <div class="text-sm" style="color: var(--muted)">Quick to deploy and easy to adapt, our modular architecture evolves with your business, markets, and partners.</div>
+        </div>
+        <div class="p-5 rounded-2xl border" style="background: var(--panel); border-color: var(--border)">
+          
+          <div class="text-lg font-semibold mb-1">Security by Default</div>
+          <div class="text-sm" style="color: var(--muted)">We ensure enterprise-grade protection with features like two-factor authentication and complete audit transparency for every transaction.</div>
         </div>
       </div>
 
