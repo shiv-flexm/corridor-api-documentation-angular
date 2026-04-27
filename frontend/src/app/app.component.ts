@@ -30,7 +30,7 @@ import { ThemeService } from './services/theme.service';
           style="background: var(--panel); border-color: var(--border); color: var(--muted)"
           data-testid="app-footer"
         >
-          <span>Copyright &copy; All Rights Reserved | Powered By FlexM</span>
+          <span>Copyright &copy; All Rights Reserved | Powered By <a href="https://flexm.com" target="_blank" class="underline" style="color: #2684ff;">FlexM</a></span>
         </footer>
       </div>
     </div>

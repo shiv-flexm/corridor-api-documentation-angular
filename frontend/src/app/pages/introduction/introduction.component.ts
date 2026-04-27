@@ -62,7 +62,8 @@ Our APIs are built to support modern money movement, providing a flexible and re
         </div>
       </div>
 
-      <!-- Modules overview -->
+      <!--
+      [Modules overview]
       <h2 class="mt-16 text-xs font-semibold uppercase tracking-[0.18em] mb-4" style="color: var(--muted)">Modules</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <a *ngFor="let m of docs.filteredModules()"
@@ -87,7 +88,7 @@ Our APIs are built to support modern money movement, providing a flexible and re
         </a>
       </div>
 
-      <!-- Conventions -->
+      [Conventions]
       <h2 class="mt-16 text-xs font-semibold uppercase tracking-[0.18em] mb-4" style="color: var(--muted)">Conventions</h2>
       <div class="rounded-2xl border divide-y" style="background: var(--panel); border-color: var(--border)">
         <div class="p-5 grid md:grid-cols-[200px_1fr] gap-4" style="border-color: var(--border)">
@@ -107,6 +108,7 @@ Our APIs are built to support modern money movement, providing a flexible and re
           <div class="text-sm" style="color: var(--muted)">Errors return a consistent JSON envelope with <span class="font-mono">type</span>, <span class="font-mono">code</span>, <span class="font-mono">message</span> and <span class="font-mono">doc_url</span>.</div>
         </div>
       </div>
+      -->
     </div>
   `
 })

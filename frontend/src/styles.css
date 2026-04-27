@@ -13,9 +13,9 @@
   --muted: #8A94A6;
   --text: #E9EEF6;
   --text-strong: #FFFFFF;
-  --accent: #3DE6D2;
-  --accent-contrast: #04120E;
-  --selection: rgba(61, 230, 210, 0.25);
+  --accent: #2684ff;
+  --accent-contrast: #FFFFFF;
+  --selection: rgba(38, 132, 255, 0.25);
   --hover-bg: rgba(255,255,255,0.05);
 }
 
@@ -29,9 +29,9 @@ html.light {
   --muted: #5B6474;
   --text: #0B0E13;
   --text-strong: #000000;
-  --accent: #0FA896;
+  --accent: #2684ff;
   --accent-contrast: #FFFFFF;
-  --selection: rgba(15, 168, 150, 0.2);
+  --selection: rgba(38, 132, 255, 0.2);
   --hover-bg: rgba(10,12,18,0.04);
 }
 
@@ -112,7 +112,7 @@ html.light .grain::before { opacity: 0.22; }
 .terminal .terminal-divider { background: rgba(255,255,255,0.06) !important; }
 
 /* JSON / code highlight tokens — ALWAYS dark-appropriate inside terminals */
-.terminal .tok-key    { color: #7CF8EB !important; }
+.terminal .tok-key    { color: #2684ff !important; }
 .terminal .tok-str    { color: #FFC48A !important; }
 .terminal .tok-num    { color: #D78BFF !important; }
 .terminal .tok-bool   { color: #8B9DFF !important; }
@@ -120,7 +120,7 @@ html.light .grain::before { opacity: 0.22; }
 .terminal .tok-punct  { color: #5B6474 !important; }
 
 /* Fallback tokens (outside .terminal) — match current theme */
-.tok-key    { color: #7CF8EB; }
+.tok-key    { color: #2684ff; }
 .tok-str    { color: #FFC48A; }
 .tok-num    { color: #D78BFF; }
 .tok-bool   { color: #8B9DFF; }

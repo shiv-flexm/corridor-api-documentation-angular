@@ -115,7 +115,7 @@ import { TryItComponent } from '../../components/try-it/try-it.component';
               <!-- Success response -->
               <section id="success" class="anchor-offset" data-testid="section-success">
                 <div class="flex items-center gap-2 mb-3">
-                  <span class="w-1.5 h-1.5 rounded-full" style="background:#3DE6D2"></span>
+                  <span class="w-1.5 h-1.5 rounded-full" style="background:#2684ff"></span>
                   <h2 class="text-xs font-semibold uppercase tracking-[0.18em]" style="color: var(--muted)">Success response</h2>
                 </div>
                 <app-code-block variant="response" [payload]="r.endpoint.successResponse" label="200 OK"></app-code-block>
@@ -235,7 +235,7 @@ export class EndpointComponent {
     if (code >= 500) return { bg: 'rgba(255,122,122,0.12)', fg: '#FF7A7A' };
     if (code >= 400) return { bg: 'rgba(255,181,71,0.14)', fg: '#FFB547' };
     if (code >= 300) return { bg: 'rgba(139,157,255,0.14)', fg: '#8B9DFF' };
-    if (code >= 200) return { bg: 'rgba(61,230,210,0.12)', fg: '#3DE6D2' };
+    if (code >= 200) return { bg: 'rgba(38,132,255,0.12)', fg: '#2684ff' };
     return { bg: 'rgba(255,255,255,0.06)', fg: '#8A94A6' };
   }
 }
