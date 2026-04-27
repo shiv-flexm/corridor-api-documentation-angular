@@ -23,13 +23,15 @@ import { ThemeService } from './services/theme.service';
           data-testid="app-main"
         >
           <router-outlet></router-outlet>
-          <footer class="px-8 py-6 text-xs" style="color: var(--muted)">
-            <div class="max-w-5xl mx-auto flex items-center justify-between">
-              <span>Built with Angular · Relay API Docs</span>
-              <span class="font-mono">api.relay.dev</span>
-            </div>
-          </footer>
         </main>
+
+        <footer
+          class="shrink-0 border-t px-6 md:px-10 py-3 text-xs flex items-center justify-center"
+          style="background: var(--panel); border-color: var(--border); color: var(--muted)"
+          data-testid="app-footer"
+        >
+          <span>Copyright &copy; All Rights Reserved | Powered By ABC</span>
+        </footer>
       </div>
     </div>
   `
