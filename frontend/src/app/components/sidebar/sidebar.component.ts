@@ -17,15 +17,8 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
     >
       <!-- Brand -->
       <div class="px-5 pt-6 pb-4 flex items-center gap-3 shrink-0">
-        <div class="w-9 h-9 rounded-xl flex items-center justify-center font-mono font-bold"
-             [style.background]="'linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 60%, white))'"
-             [style.color]="'var(--accent-contrast)'">
-          R
-        </div>
-        <div class="leading-tight">
-          <div class="text-lg font-bold tracking-tight" style="color: var(--text)">Relay</div>
-          <div class="text-[11px] uppercase tracking-[0.18em]" style="color: var(--muted)">API · {{ docs.version() }}</div>
-        </div>
+        <img src="assets/images/flexm-logo.png" class="w-22 h-16">
+        
       </div>
 
       <!-- Search -->

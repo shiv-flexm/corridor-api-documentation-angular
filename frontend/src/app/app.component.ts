@@ -30,7 +30,7 @@ import { ThemeService } from './services/theme.service';
           style="background: var(--panel); border-color: var(--border); color: var(--muted)"
           data-testid="app-footer"
         >
-          <span>Copyright &copy; All Rights Reserved | Powered By ABC</span>
+          <span>Copyright &copy; All Rights Reserved | Powered By FlexM</span>
         </footer>
       </div>
     </div>
