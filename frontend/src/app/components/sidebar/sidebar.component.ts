@@ -17,9 +17,8 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
       data-testid="sidebar"
     >
       <!-- Brand -->
-      <div class="px-5 pt-6 pb-4 flex items-center gap-3 shrink-0">
-        <img src="assets/images/flexm-logo.png" class="w-22 h-16">
-        
+      <div class="px-5 pt-6 pb-4 flex justify-center items-center shrink-0">
+        <img src="assets/images/flexm-logo.png" class="h-8 w-auto object-contain">
       </div>
 
       <!-- Search trigger (opens command palette) -->
@@ -116,19 +115,6 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
         </div>
       </nav>
 
-      <!-- Auth gate -->
-      <div class="px-5 py-4 border-t shrink-0" style="border-color: var(--border)">
-        <button
-          (click)="auth.toggle()"
-          class="w-full text-xs font-mono px-3 py-2 pill flex items-center justify-between transition-colors"
-          style="background: var(--panel-2); color: var(--text); border: 1px solid var(--border)"
-          data-testid="auth-toggle"
-        >
-          <span>{{ auth.signedIn() ? 'Signed in' : 'Anonymous' }}</span>
-          <span class="w-2 h-2 rounded-full"
-            [style.background]="auth.signedIn() ? '#3DE6D2' : '#FF7A7A'"></span>
-        </button>
-      </div>
     </aside>
   `,
   styles: [`:host{display:flex}`]
