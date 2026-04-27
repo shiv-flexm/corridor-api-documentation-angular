@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../services/theme.service';
 import { ApiDocsService } from '../../services/api-docs.service';
+import { CommandPaletteService } from '../../services/command-palette.service';
 
 @Component({
   selector: 'app-topbar',
@@ -20,6 +21,24 @@ import { ApiDocsService } from '../../services/api-docs.service';
       </div>
 
       <div class="flex items-center gap-2">
+        <!-- Cmd+K hint / trigger -->
+        <button
+          (click)="palette.show()"
+          class="hidden sm:inline-flex items-center gap-2 text-xs font-mono px-3 py-2 pill transition-colors"
+          style="color: var(--muted); border: 1px solid var(--border); background: var(--panel-2)"
+          data-testid="cmdk-trigger"
+          aria-label="Open search"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+          </svg>
+          <span>Search</span>
+          <span class="flex items-center gap-1">
+            <kbd class="px-1.5 py-0.5 rounded text-[10px]" style="background: var(--panel); border: 1px solid var(--border); color: var(--muted)">{{ modKeyLabel }}</kbd>
+            <kbd class="px-1.5 py-0.5 rounded text-[10px]" style="background: var(--panel); border: 1px solid var(--border); color: var(--muted)">K</kbd>
+          </span>
+        </button>
+
         <a
           href="https://github.com"
           target="_blank"
@@ -53,4 +72,6 @@ import { ApiDocsService } from '../../services/api-docs.service';
 export class TopbarComponent {
   theme = inject(ThemeService);
   docs = inject(ApiDocsService);
+  palette = inject(CommandPaletteService);
+  readonly modKeyLabel = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl';
 }
