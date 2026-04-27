@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
+import { CommandPaletteComponent } from './components/command-palette/command-palette.component';
 import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, TopbarComponent],
+  imports: [RouterOutlet, SidebarComponent, TopbarComponent, CommandPaletteComponent],
   template: `
     <div class="grain h-screen flex overflow-hidden" [attr.data-theme]="theme.theme()">
       <!-- Fixed sidebar -->
@@ -33,6 +34,9 @@ import { ThemeService } from './services/theme.service';
           <span>Copyright &copy; All Rights Reserved | Powered By <a href="https://flexm.com" target="_blank" class="underline" style="color: #2684ff;">FlexM</a></span>
         </footer>
       </div>
+
+      <!-- Global Cmd/Ctrl+K palette -->
+      <app-command-palette></app-command-palette>
     </div>
   `
 })
