@@ -8,12 +8,8 @@ import { CommandPaletteService } from '../../services/command-palette.service';
 import { ApiDocsService } from '../../services/api-docs.service';
 import { AuthService } from '../../services/auth.service';
 import { MethodBadgeComponent } from '../method-badge/method-badge.component';
-import { Endpoint, ApiModule, API_MODULES } from '../../data/api-data';
+import { API_MODULES } from '../../data/api-data';
 
-interface Hit {
-  module: ApiModule;
-  endpoint: Endpoint;
-}
 
 @Component({
   selector: 'app-command-palette',
@@ -146,11 +142,11 @@ export class CommandPaletteComponent implements AfterViewInit {
   query = signal<string>('');
   active = signal<number>(0);
 
-  hits = computed<Hit[]>(() => {
+  hits = computed(() => {
     const q = this.query().trim().toLowerCase();
     const v = this.docs.version();
     const signedIn = this.auth.signedIn();
-    const out: Hit[] = [];
+    const out = [];
     for (const m of API_MODULES) {
       for (const e of m.endpoints) {
         if (!e.versions.includes(v)) continue;
@@ -161,8 +157,8 @@ export class CommandPaletteComponent implements AfterViewInit {
     return out;
   });
 
-  grouped = computed<{ id: string; name: string; items: Hit[] }[]>(() => {
-    const map = new Map<string, { id: string; name: string; items: Hit[] }>();
+  grouped = computed<{ id: string; name: string; items: any }[]>(() => {
+    const map = new Map<string, { id: string; name: string; items: any }>();
     for (const h of this.hits()) {
       const key = h.module.id;
       if (!map.has(key)) map.set(key, { id: key, name: h.module.name, items: [] });
@@ -196,7 +192,7 @@ export class CommandPaletteComponent implements AfterViewInit {
     if (this.palette.open()) this.inputEl?.nativeElement.focus();
   }
 
-  private matches(e: Endpoint, m: ApiModule, q: string): boolean {
+  private matches(e: any, m: any, q: string): boolean {
     return (
       e.name.toLowerCase().includes(q) ||
       e.route.toLowerCase().includes(q) ||
@@ -206,7 +202,7 @@ export class CommandPaletteComponent implements AfterViewInit {
     );
   }
 
-  flatIndex(group: { items: Hit[] }, i: number): number {
+  flatIndex(group: { items: any }, i: number): number {
     let idx = 0;
     for (const g of this.grouped()) {
       if (g === group) return idx + i;
@@ -240,7 +236,7 @@ export class CommandPaletteComponent implements AfterViewInit {
     }
   }
 
-  go(hit: Hit) {
+  go(hit: any) {
     this.router.navigate(['/docs', hit.module.id, hit.endpoint.id]);
     this.palette.hide();
   }

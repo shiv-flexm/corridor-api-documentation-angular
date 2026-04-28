@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Endpoint } from '../../data/api-data';
 import { buildCurl, buildNode, buildPython, buildTypeScript, toJson } from '../../utils/code-samples';
 import { highlightCode, highlightJson } from '../../utils/highlight';
 
@@ -60,7 +59,7 @@ type Lang = 'curl' | 'json' | 'ts' | 'py' | 'node';
 })
 export class CodeBlockComponent implements OnChanges {
   @Input() variant: 'request' | 'payload' | 'response' = 'request';
-  @Input() endpoint: Endpoint | null = null;
+  @Input() endpoint: any | null = null;
   @Input() payload: unknown = null;
   @Input() label = '';
 
@@ -91,9 +90,9 @@ export class CodeBlockComponent implements OnChanges {
     const ep = this.endpoint!;
     switch (this.lang()) {
       case 'curl': return buildCurl(ep);
-      case 'ts':   return buildTypeScript(ep);
+      case 'ts': return buildTypeScript(ep);
       case 'node': return buildNode(ep);
-      case 'py':   return buildPython(ep);
+      case 'py': return buildPython(ep);
       case 'json': return ep.requestBody ? toJson(ep.requestBody) : toJson({});
     }
   }
@@ -103,8 +102,8 @@ export class CodeBlockComponent implements OnChanges {
     switch (this.lang()) {
       case 'json': return highlightJson(r);
       case 'curl': return highlightCode(r, 'bash');
-      case 'py':   return highlightCode(r, 'py');
-      case 'ts':   return highlightCode(r, 'ts');
+      case 'py': return highlightCode(r, 'py');
+      case 'ts': return highlightCode(r, 'ts');
       case 'node': return highlightCode(r, 'js');
     }
   }

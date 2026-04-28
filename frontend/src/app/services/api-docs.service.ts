@@ -1,22 +1,22 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { API_MODULES, ApiModule, Endpoint } from '../data/api-data';
+import { API_MODULES } from '../data/api-data';
 
 @Injectable({ providedIn: 'root' })
 export class ApiDocsService {
-  private readonly _modules = signal<ApiModule[]>(API_MODULES);
+  private readonly _modules = signal<any[]>(API_MODULES);
   private readonly _version = signal<'v1' | 'v2'>('v1');
   private readonly _search = signal<string>('');
 
   readonly version = this._version.asReadonly();
   readonly search = this._search.asReadonly();
 
-  readonly filteredModules = computed<ApiModule[]>(() => {
+  readonly filteredModules = computed<any[]>(() => {
     const q = this._search().trim().toLowerCase();
     const v = this._version();
     return this._modules()
       .map((m) => ({
         ...m,
-        endpoints: m.endpoints.filter((e) => {
+        endpoints: m.endpoints.filter((e: any) => {
           if (!e.versions.includes(v)) return false;
           if (!q) return true;
           return (
@@ -33,10 +33,10 @@ export class ApiDocsService {
   setVersion(v: 'v1' | 'v2') { this._version.set(v); }
   setSearch(q: string) { this._search.set(q); }
 
-  findEndpoint(moduleId: string, endpointId: string): { module: ApiModule; endpoint: Endpoint } | null {
-    const m = this._modules().find((x) => x.id === moduleId);
+  findEndpoint(moduleId: string, endpointId: string): { module: any; endpoint: any } | null {
+    const m = this._modules().find((x: any) => x.id === moduleId);
     if (!m) return null;
-    const e = m.endpoints.find((x) => x.id === endpointId);
+    const e = m.endpoints.find((x: any) => x.id === endpointId);
     if (!e) return null;
     return { module: m, endpoint: e };
   }

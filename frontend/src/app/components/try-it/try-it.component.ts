@@ -1,6 +1,5 @@
 import { Component, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Endpoint } from '../../data/api-data';
 import { CodeBlockComponent } from '../code-block/code-block.component';
 import { MethodBadgeComponent } from '../method-badge/method-badge.component';
 
@@ -31,27 +30,17 @@ import { MethodBadgeComponent } from '../method-badge/method-badge.component';
       </div>
 
       <div class="p-5 grid md:grid-cols-2 gap-5" style="background: var(--panel-2)">
-        <div>
+        <div class="w-[47vw]">
           <div class="text-[10px] uppercase tracking-[0.18em] mb-2" style="color: var(--muted)">Mock response · {{ status() }}</div>
           <app-code-block variant="response" [payload]="response()"></app-code-block>
         </div>
-        <div>
-          <div class="text-[10px] uppercase tracking-[0.18em] mb-2" style="color: var(--muted)">Latency</div>
-          <div class="terminal p-5">
-            <div class="font-mono text-sm" style="color:#D5DCE8">
-              <div class="flex items-center justify-between mb-2"><span>HTTP</span><span class="tok-num">{{ status() }}</span></div>
-              <div class="flex items-center justify-between mb-2"><span>took</span><span class="tok-num">{{ latency() }} ms</span></div>
-              <div class="flex items-center justify-between mb-2"><span>region</span><span class="tok-str">"iad-02"</span></div>
-              <div class="flex items-center justify-between"><span>trace</span><span class="tok-str">"trc_{{ traceId() }}"</span></div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
   `
 })
 export class TryItComponent {
-  @Input({ required: true }) endpoint!: Endpoint;
+  @Input({ required: true }) endpoint!: any;
 
   loading = signal(false);
   response = signal<unknown>({ ready: true });
@@ -64,7 +53,7 @@ export class TryItComponent {
     setTimeout(() => {
       const useError = Math.random() < 0.15;
       this.response.set(useError ? this.endpoint.errorResponse : this.endpoint.successResponse);
-      this.status.set(useError ? (this.endpoint.statusCodes.find((s) => s.code >= 400)?.code ?? 400) : this.endpoint.statusCodes[0].code);
+      this.status.set(useError ? (this.endpoint.statusCodes.find((s: any) => s.code >= 400)?.code ?? 400) : this.endpoint.statusCodes[0].code);
       this.latency.set(60 + Math.floor(Math.random() * 180));
       this.traceId.set(Math.random().toString(36).slice(2, 7));
       this.loading.set(false);

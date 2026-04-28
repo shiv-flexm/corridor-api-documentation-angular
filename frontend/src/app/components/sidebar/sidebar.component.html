@@ -1,0 +1,90 @@
+<aside class="w-[300px] shrink-0 h-screen flex flex-col border-r"
+    style="background: var(--panel); border-color: var(--border)" data-testid="sidebar">
+    <!-- Brand -->
+    <div class="px-5 pt-6 pb-4 flex justify-center items-center shrink-0">
+        <img src="assets/images/flexm-logo.png" class="h-8 w-auto object-contain">
+    </div>
+
+    <!-- Search trigger (opens command palette) -->
+    <div class="px-5 pb-1.5 shrink-0">
+        <button type="button" (click)="openPalette()" (focus)="openPalette()"
+            class="w-full flex items-center gap-2.5 text-sm rounded-xl py-2.5 pl-9 pr-3 relative text-left"
+            style="background: var(--panel-2); color: var(--muted); border: 1px solid var(--border)"
+            data-testid="sidebar-search" aria-label="Open search">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24" style="color: var(--muted)">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M21 21l-4.3-4.3" />
+            </svg>
+            <span class="flex-1 truncate">Search endpoints…</span>
+            <span class="flex items-center gap-1">
+                <kbd class="px-1.5 py-0.5 rounded text-[10px] font-mono"
+                    style="background: var(--panel); border: 1px solid var(--border); color: var(--muted)">{{
+                    modKeyLabel }}</kbd>
+                <kbd class="px-1.5 py-0.5 rounded text-[10px] font-mono"
+                    style="background: var(--panel); border: 1px solid var(--border); color: var(--muted)">K</kbd>
+            </span>
+        </button>
+    </div>
+
+    <!-- Subtle hint text (replaces the old "Version v1 v2" row) -->
+    <div class="px-5 pb-3 shrink-0">
+        <span class="text-[11px] font-mono tracking-wide" style="color: #6B7280" data-testid="sidebar-hint">
+            Search (Ctrl&nbsp;+&nbsp;K)
+        </span>
+    </div>
+
+    <!-- Nav (scrollable area) -->
+    <nav class="flex-1 overflow-y-auto px-3 pb-4" data-testid="sidebar-nav">
+        <!-- Introduction -->
+        <a [routerLink]="['/introduction']" routerLinkActive #introActive="routerLinkActive"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm transition-colors mt-1"
+            [style.color]="introActive.isActive ? 'var(--text)' : 'var(--muted)'"
+            [style.background]="introActive.isActive ? 'color-mix(in oklab, var(--accent) 12%, transparent)' : 'transparent'"
+            [style.boxShadow]="introActive.isActive ? 'inset 3px 0 0 var(--accent)' : 'none'"
+            data-testid="nav-introduction">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+            </svg>
+            <span class="font-medium">Introduction</span>
+        </a>
+
+        <div class="my-3 mx-3 h-px" style="background: var(--border)"></div>
+
+        <ng-container *ngFor="let mod of docs.filteredModules()">
+            <div class="mt-2">
+                <button (click)="toggle(mod.id)"
+                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs uppercase tracking-[0.12em] transition-colors"
+                    [style.color]="'var(--muted)'" [attr.data-testid]="'module-' + mod.id">
+                    <span class="font-semibold">{{ mod.name }}</span>
+                    <svg class="w-3 h-3 transition-transform" [class.rotate-90]="isOpen(mod.id)" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </button>
+                <ul *ngIf="isOpen(mod.id)" class="mt-1 space-y-0.5">
+                    <li *ngFor="let ep of visibleEndpoints(mod)">
+                        <a [routerLink]="['/docs', mod.id, ep.id]" routerLinkActive #rla="routerLinkActive"
+                            class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors"
+                            [style.color]="rla.isActive ? 'var(--text)' : 'var(--muted)'"
+                            [style.background]="rla.isActive ? 'color-mix(in oklab, var(--accent) 12%, transparent)' : 'transparent'"
+                            [style.boxShadow]="rla.isActive ? 'inset 3px 0 0 var(--accent)' : 'none'"
+                            [attr.data-testid]="'nav-' + mod.id + '-' + ep.id">
+                            <app-method-badge [method]="ep.method"></app-method-badge>
+                            <span class="truncate">{{ ep.name }}</span>
+                            <span *ngIf="ep.requiresAuth && !auth.signedIn()" class="ml-auto text-[10px]"
+                                style="color: var(--muted)">🔒</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </ng-container>
+        <div *ngIf="docs.filteredModules().length === 0" class="px-3 py-6 text-sm" style="color: var(--muted)"
+            data-testid="no-results">
+            No endpoints match.
+        </div>
+    </nav>
+
+</aside>

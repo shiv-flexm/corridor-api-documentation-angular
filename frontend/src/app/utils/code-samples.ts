@@ -1,4 +1,4 @@
-import { Endpoint } from '../data/api-data';
+
 
 const BASE = 'https://api.relay.dev';
 
@@ -6,18 +6,18 @@ export function toJson(value: unknown): string {
   return JSON.stringify(value, null, 2);
 }
 
-function hasBody(ep: Endpoint): boolean {
+function hasBody(ep: any): boolean {
   return !!ep.requestBody && ['POST', 'PUT', 'PATCH'].includes(ep.method);
 }
 
-export function buildCurl(ep: Endpoint): string {
+export function buildCurl(ep: any): string {
   const lines: string[] = [];
   lines.push(`curl -X ${ep.method} "${BASE}${ep.route}" \\`);
   if (ep.requiresAuth) lines.push(`  -H "Authorization: Bearer $RELAY_API_KEY" \\`);
   if (hasBody(ep)) lines.push(`  -H "Content-Type: application/json" \\`);
   ep.headers
-    .filter((h) => h.name.toLowerCase() !== 'authorization' && h.name.toLowerCase() !== 'content-type')
-    .forEach((h) => lines.push(`  -H "${h.name}: ${h.example ?? '<' + h.type + '>'}" \\`));
+    .filter((h: any) => h.name.toLowerCase() !== 'authorization' && h.name.toLowerCase() !== 'content-type')
+    .forEach((h: any) => lines.push(`  -H "${h.name}: ${h.example ?? '<' + h.type + '>'}" \\`));
   if (hasBody(ep)) {
     lines.push(`  -d '${JSON.stringify(ep.requestBody)}'`);
   } else {
@@ -28,7 +28,7 @@ export function buildCurl(ep: Endpoint): string {
   return lines.join('\n');
 }
 
-export function buildTypeScript(ep: Endpoint): string {
+export function buildTypeScript(ep: any): string {
   const body = hasBody(ep) ? `,\n  body: JSON.stringify(${JSON.stringify(ep.requestBody, null, 2).replace(/\n/g, '\n  ')})` : '';
   const auth = ep.requiresAuth ? `\n    Authorization: \`Bearer \${process.env.RELAY_API_KEY}\`,` : '';
   const ct = hasBody(ep) ? `\n    "Content-Type": "application/json",` : '';
@@ -44,7 +44,7 @@ const data = await res.json();
 console.log(data);`;
 }
 
-export function buildNode(ep: Endpoint): string {
+export function buildNode(ep: any): string {
   const body = hasBody(ep) ? `,\n  body: JSON.stringify(${JSON.stringify(ep.requestBody, null, 2).replace(/\n/g, '\n  ')})` : '';
   const auth = ep.requiresAuth ? `\n    Authorization: \`Bearer \${process.env.RELAY_API_KEY}\`,` : '';
   const ct = hasBody(ep) ? `\n    "Content-Type": "application/json",` : '';
@@ -59,7 +59,7 @@ const data = await res.json();
 console.log(data);`;
 }
 
-export function buildPython(ep: Endpoint): string {
+export function buildPython(ep: any): string {
   const headers: string[] = [];
   if (ep.requiresAuth) headers.push(`"Authorization": f"Bearer {os.environ['RELAY_API_KEY']}"`);
   if (hasBody(ep)) headers.push(`"Content-Type": "application/json"`);
